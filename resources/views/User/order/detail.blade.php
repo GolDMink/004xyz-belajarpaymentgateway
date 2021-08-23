@@ -1,14 +1,17 @@
 @extends('layouts.master')
 @section('content')
 <style>
-    .feather,
+    /* .feather,
     [feather-check] {
         width: 120px;
         height: 120px;
         color: #28C76F;
-    }
+    } */
     .row#copy{
         justify-content: center;
+    }
+    .img-logobank{
+        max-width: 300px;
     }
 </style>
 <div class="app-content content ">
@@ -59,8 +62,19 @@
                     <div class="card-body text-center">
                         <h3>Transaksi Berhasil</h3>
                         <p>Mohon Segera Selesaikan Pembayaran</p>
-                        <i data-feather='check'></i>
-                        <div class="col-12 mt-3">
+                        {{-- <i data-feather='check'></i> --}}
+                        <div class="col-12 mb-2 mt -2">
+                            @php
+                                $bank = $data['va_numbers'][0]['bank'];
+                                @endphp
+                                @if ($bank =='bca')
+                                <img class="img-logobank" src="{{asset('zsh/app-assets/images/logobank/logo-bank-bca.png')}}">
+                                @elseif ($bank == 'bri')
+                                <img class="img-logobank" src="{{asset('zsh/app-assets/images/logobank/logo-bank-bri.png')}}">
+                                @endif
+                            <h5><strong>Nominal Bayar : {{number_format($data['gross_amount'])}}</strong></h5>
+                        </div>
+                        <div class="col-12 ">
                             <h6><strong>Waktu sisa pembayaran</strong></h6>
                             <h4 class="text-danger">00.219.10</h4>
                         </div>
@@ -76,7 +90,9 @@
                             </div>
                         </div>
                         <div class="col-12">
-                            <a href="{{url('sudahBayar/'.$data['order_id'])}}" class="btn btn-primary">Sudah Bayar</a>
+                            <a href="{{url('sudahBayar/'.$data['order_id'])}}" class="btn btn-warning">Kembali</a>
+                            <a href="{{url('sudahBayar/'.$data['order_id'])}}" class="btn btn-primary">Upload Bukti Pembayaran</a>
+                            <a href="{{url('sudahBayar/'.$data['order_id'])}}" class="btn btn-success">Sudah Bayar</a>
                         </div>
                     </div>
                 </div>

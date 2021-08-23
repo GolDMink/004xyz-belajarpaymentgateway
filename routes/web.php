@@ -32,6 +32,7 @@ Route::post('midtrans/va-payment','CheckoutController@PembayaranOnline')->name('
 Route::group(
     ['namespace'=>'User','prefix'=>'user'],function(){
         route::get('myorder','OrderController@myorder')->name('myOrder');
+        route::get('myorder/{id}','OrderController@detailOrder')->name('detail.order');
     }
 );
 

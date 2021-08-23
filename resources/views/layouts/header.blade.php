@@ -31,7 +31,7 @@ if (Auth::check()) {
                     </g>
                 </svg>
             </span>
-            <h2 class="brand-text mb-0 ml-2">Toko Sabu Online</h2>
+            <h2 class="brand-text mb-0 ml-2">Pasarkita</h2>
     </div>
     <div class="navbar-container d-flex content">
         <div class="bookmark-wrapper d-flex align-items-center">

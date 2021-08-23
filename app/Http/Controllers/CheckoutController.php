@@ -58,7 +58,7 @@ class CheckoutController extends Controller
                 Keranjang::where('user_id',Auth::user()->id)->delete();
                 $data = json_decode(json_encode($charge),true);
                 // dd($data);
-                return redirect()->route('payment',$data['order_id']);
+                return redirect()->route('detail.order',$data['order_id']);
                 // return view('User.payment.detail',['data'=>$data]);
         } catch (\Exception $th) {
             dd($th);
