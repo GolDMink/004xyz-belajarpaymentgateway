@@ -16,14 +16,18 @@ class Keranjang extends Model
 
     public function data()
     {
-        $data = Keranjang::with('produk')->where('user_id',Auth::user()->id)->get();
+        $data = Keranjang::with('produk')->where('user_id',Auth::user()->id)->get()
+                        ->map
+                        ->only('id','produk','invoice','jumlah','harga','barang_id');
         return $data;
     }
     public function total()
     {
         $total=0;
-        foreach($this->data() as $item){
-            $total += $item->harga * $item->jumlah;
+        $item = $this->data();
+        // dd($item);
+        foreach($item as $item){
+            $total += $item['harga'] * $item['jumlah'];
         }
         return $total;
     }

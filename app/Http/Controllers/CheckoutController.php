@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Model\Keranjang;
 use App\model\Order;
+use App\model\OrderDetail;
 use App\Model\Product;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
@@ -32,6 +33,15 @@ class CheckoutController extends Controller
     {
         // return $request->all();
         Config::$serverKey= 'SB-Mid-server-ITkrr-tN0YnP3Tpdou8eBxGZ';
+        $datakeranjang = $this->keranjang->data();
+        foreach($datakeranjang as $key => $i){
+            $item[] =  array(
+                'id' => $i['id'],
+                'price' => $i['harga'],
+                'quantity' => $i['jumlah'],
+                'name' => $i['produk']['nama_produk']
+            );
+        }
 
         try {
             $order = new Order();
@@ -50,16 +60,25 @@ class CheckoutController extends Controller
                     'gross_amount' => $order->total
                 ],
                 'customer_details' => ['name' => Auth::user()->name],
+                'item_details' => $item,
                 'bank_transfer' => [
                     'bank' => $order->metode_pembayaran,
                 ]
                 ];
+            foreach ($datakeranjang as $i){
+                $order_detail = new OrderDetail();
+                $order_detail->order_id = $order->id;
+                $order_detail->barang_id = $i['barang_id'];
+                $order_detail->jumlah = $i['jumlah'];
+                $order_detail->save();
+            }
+            for($i=0;$i<count($datakeranjang);$i++){
+
+            }
                 $charge = CoreApi::charge($payment);
                 Keranjang::where('user_id',Auth::user()->id)->delete();
                 $data = json_decode(json_encode($charge),true);
-                // dd($data);
-                return redirect()->route('detail.order',$data['order_id']);
-                // return view('User.payment.detail',['data'=>$data]);
+            return redirect()->route('detail.order',$data['order_id']);
         } catch (\Exception $th) {
             dd($th);
             $code = $th->getCode();
